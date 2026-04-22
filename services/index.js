@@ -3,6 +3,7 @@ const userManagement = require("./usermanagement");
 const serviceManagement = require("./servicemanagement");
 const orderManagement = require("./ordermanagement");
 const dashboard = require("./dashboard");
+const seed = require("./seed");
 
 module.exports = {
   adminAuthentication,
@@ -10,4 +11,5 @@ module.exports = {
   serviceManagement,
   orderManagement,
   dashboard,
+  seed,
 };

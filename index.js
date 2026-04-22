@@ -11,6 +11,7 @@ const publicServicesRouter = require("./routes/publicservices");
 const publicOrdersRouter = require("./routes/publicorders");
 const orderManagementRouter = require("./routes/ordermanagement");
 const dashboardRouter = require("./routes/dashboard");
+const publicSeedRouter = require("./routes/publicseed");
 
 const app = express();
 
@@ -23,6 +24,7 @@ console.log("DB URL:", process.env.DATABASE_URL);
 app.use("/health", healthRouter);
 app.use("/services", publicServicesRouter);
 app.use("/orders", publicOrdersRouter);
+app.use("/seed", publicSeedRouter);
 app.use("/admin/auth", adminAuthRouter);
 app.use("/admin/users", userManagementRouter);
 app.use("/admin/services", serviceManagementRouter);
