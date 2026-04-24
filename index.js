@@ -26,7 +26,8 @@ app.use(cors({
     "https://www.edulives.com",
     "https://paintbrush.in",
     "https://www.paintbrush.in",
-    "http://localhost:8080"
+    "http://localhost:8080",
+    "https://paintbrush-tan.vercel.app"
   ],
   credentials: true
 }));
