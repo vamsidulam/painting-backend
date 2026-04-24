@@ -19,7 +19,17 @@ const publicSeedRouter = require("./routes/publicseed");
 const app = express();
 
 
-app.use(cors());
+
+app.use(cors({
+  origin: [
+    "https://edulives.com",
+    "https://www.edulives.com",
+    "https://paintbrush.in",
+    "https://www.paintbrush.in",
+    "http://localhost:8080"
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 console.log("DB URL:", process.env.DATABASE_URL);
@@ -54,7 +64,7 @@ const PORT = process.env.PORT || 3000;
 async function start() {
   await connectDb();
   app.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`);
+    console.log(`Server listening on ${PORT}`);
   });
 }
 
