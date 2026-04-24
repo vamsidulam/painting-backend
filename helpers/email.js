@@ -51,7 +51,7 @@ function escapeHtml(value) {
 async function sendMail({ to, subject, html, text }) {
   const t = getTransporter();
   return t.sendMail({
-    from: `"Brushly" <${process.env.APP_EMAIL}>`,
+    from: `"PaintBrush" <${process.env.APP_EMAIL}>`,
     to,
     subject,
     text,
@@ -62,23 +62,23 @@ async function sendMail({ to, subject, html, text }) {
 async function sendAdminInvite({ to, name, token }) {
   const link = buildSetPasswordLink(token);
   const safeName = escapeHtml(name);
-  const subject = "You've been invited to Brushly Admin";
+  const subject = "You've been invited to PaintBrush Admin";
 
   const text = [
     `Hi ${name},`,
     "",
-    "You've been added as an admin on Brushly.",
+    "You've been added as an admin on PaintBrush.",
     "Click the link below to set your password and finish setting up your account:",
     link,
     "",
     "This link expires in 24 hours.",
     "",
-    "— Brushly",
+    "— PaintBrush",
   ].join("\n");
 
   const html = `
     <div style="font-family:Inter,Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;color:#0a1a2e">
-      <h2 style="color:#005dc3;margin:0 0 16px">Welcome to Brushly Admin</h2>
+      <h2 style="color:#005dc3;margin:0 0 16px">Welcome to PaintBrush Admin</h2>
       <p>Hi ${safeName},</p>
       <p>You've been added as an admin. Click the button below to set your password and finish setting up your account.</p>
       <p style="margin:24px 0">
@@ -95,7 +95,7 @@ async function sendAdminInvite({ to, name, token }) {
 async function sendPasswordReset({ to, name, token }) {
   const link = buildSetPasswordLink(token);
   const safeName = escapeHtml(name);
-  const subject = "Reset your Brushly password";
+  const subject = "Reset your PaintBrush password";
 
   const text = [
     `Hi ${name},`,
@@ -107,7 +107,7 @@ async function sendPasswordReset({ to, name, token }) {
     "If you didn't request this, you can safely ignore this email.",
     "This link expires in 15 minutes.",
     "",
-    "— Brushly",
+    "— PaintBrush",
   ].join("\n");
 
   const html = `
