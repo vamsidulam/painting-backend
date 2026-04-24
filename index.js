@@ -7,9 +7,12 @@ const healthRouter = require("./routes/health");
 const adminAuthRouter = require("./routes/adminauthentication");
 const userManagementRouter = require("./routes/usermanagement");
 const serviceManagementRouter = require("./routes/servicemanagement");
+const serviceCategoryManagementRouter = require("./routes/servicecategorymanagement");
 const publicServicesRouter = require("./routes/publicservices");
 const publicOrdersRouter = require("./routes/publicorders");
+const publicProjectsRouter = require("./routes/publicprojects");
 const orderManagementRouter = require("./routes/ordermanagement");
+const projectManagementRouter = require("./routes/projectmanagement");
 const dashboardRouter = require("./routes/dashboard");
 const publicSeedRouter = require("./routes/publicseed");
 
@@ -24,11 +27,14 @@ console.log("DB URL:", process.env.DATABASE_URL);
 app.use("/health", healthRouter);
 app.use("/services", publicServicesRouter);
 app.use("/orders", publicOrdersRouter);
+app.use("/projects", publicProjectsRouter);
 app.use("/seed", publicSeedRouter);
 app.use("/admin/auth", adminAuthRouter);
 app.use("/admin/users", userManagementRouter);
 app.use("/admin/services", serviceManagementRouter);
+app.use("/admin/service-categories", serviceCategoryManagementRouter);
 app.use("/admin/orders", orderManagementRouter);
+app.use("/admin/projects", projectManagementRouter);
 app.use("/admin/dashboard", dashboardRouter);
 
 app.use((req, res) => {

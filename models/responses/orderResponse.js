@@ -3,6 +3,7 @@ function serializeOrder(order) {
   return {
     id: plain.id || (plain._id ? String(plain._id) : undefined),
     category: plain.category,
+    categoryId: plain.categoryId ? String(plain.categoryId) : null,
     service: plain.service
       ? {
           id: plain.service.id ? String(plain.service.id) : undefined,

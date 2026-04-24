@@ -1,7 +1,10 @@
 const express = require("express");
 const multer = require("multer");
 
-const { createOrder } = require("../services/ordermanagement");
+const {
+  createOrder,
+  attachScreenshot,
+} = require("../services/ordermanagement");
 const createOrderRequest = require("../models/requests/createOrderRequest");
 const { serializeOrder } = require("../models/responses/orderResponse");
 
@@ -30,13 +33,6 @@ function safeParseJson(value, fallback) {
 
 router.post("/", upload.single("screenshot"), async (req, res, next) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        error: "Payment screenshot is required",
-      });
-    }
-
     const payload = {
       category: req.body.category,
       service: safeParseJson(req.body.service, {}),
@@ -68,5 +64,21 @@ router.post("/", upload.single("screenshot"), async (req, res, next) => {
     next(err);
   }
 });
+
+router.post(
+  "/:id/screenshot",
+  upload.single("screenshot"),
+  async (req, res, next) => {
+    try {
+      const order = await attachScreenshot({
+        id: req.params.id,
+        file: req.file,
+      });
+      res.json({ success: true, data: { order: serializeOrder(order) } });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 module.exports = router;

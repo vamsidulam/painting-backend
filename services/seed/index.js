@@ -1,3 +1,4 @@
 const seedAdmin = require("./seedAdmin");
+const seedServiceCategories = require("./seedServiceCategories");
 
-module.exports = { seedAdmin };
+module.exports = { seedAdmin, seedServiceCategories };

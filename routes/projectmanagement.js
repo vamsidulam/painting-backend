@@ -2,18 +2,18 @@ const express = require("express");
 const multer = require("multer");
 
 const {
-  listServices,
-  createService,
-  updateService,
-  deleteService,
-} = require("../services/servicemanagement");
+  listProjects,
+  createProject,
+  updateProject,
+  deleteProject,
+} = require("../services/projectmanagement");
 
-const listServicesQuery = require("../models/requests/listServicesQuery");
-const createServiceRequest = require("../models/requests/createServiceRequest");
-const updateServiceRequest = require("../models/requests/updateServiceRequest");
+const listProjectsQuery = require("../models/requests/listProjectsQuery");
+const createProjectRequest = require("../models/requests/createProjectRequest");
+const updateProjectRequest = require("../models/requests/updateProjectRequest");
 
 const { validateQuery } = require("../helpers/validation");
-const { serializeService } = require("../models/responses/serviceResponse");
+const { serializeProject } = require("../models/responses/projectResponse");
 const requireAdmin = require("../middleware/requireAdmin");
 
 const router = express.Router();
@@ -31,13 +31,13 @@ const upload = multer({
 
 router.use(requireAdmin);
 
-router.get("/", validateQuery(listServicesQuery), async (req, res, next) => {
+router.get("/", validateQuery(listProjectsQuery), async (req, res, next) => {
   try {
-    const result = await listServices(req.validated);
+    const result = await listProjects(req.validated);
     res.json({
       success: true,
       data: {
-        rows: result.rows.map(serializeService),
+        rows: result.rows.map(serializeProject),
         pagination: {
           total: result.total,
           page: result.page,
@@ -53,14 +53,8 @@ router.get("/", validateQuery(listServicesQuery), async (req, res, next) => {
 
 router.post("/", upload.single("image"), async (req, res, next) => {
   try {
-    const payload = {
-      name: req.body.name,
-      cost: req.body.cost,
-      description: req.body.description,
-      workType: req.body.workType,
-      categoryId: req.body.categoryId,
-    };
-    const parsed = createServiceRequest.safeParse(payload);
+    const payload = { name: req.body.name };
+    const parsed = createProjectRequest.safeParse(payload);
     if (!parsed.success) {
       return res.status(400).json({
         success: false,
@@ -72,14 +66,14 @@ router.post("/", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const service = await createService({
+    const project = await createProject({
       input: parsed.data,
       file: req.file,
       actor: req.user,
     });
     res.status(201).json({
       success: true,
-      data: { service: serializeService(service) },
+      data: { project: serializeProject(project) },
     });
   } catch (err) {
     next(err);
@@ -90,12 +84,6 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
     const payload = {};
     if (req.body.name !== undefined) payload.name = req.body.name;
-    if (req.body.cost !== undefined) payload.cost = req.body.cost;
-    if (req.body.description !== undefined)
-      payload.description = req.body.description;
-    if (req.body.workType !== undefined) payload.workType = req.body.workType;
-    if (req.body.categoryId !== undefined)
-      payload.categoryId = req.body.categoryId;
     if (req.body.removeImage !== undefined)
       payload.removeImage = req.body.removeImage;
 
@@ -108,7 +96,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const parsed = updateServiceRequest.safeParse(
+    const parsed = updateProjectRequest.safeParse(
       Object.keys(payload).length > 0 ? payload : { removeImage: false },
     );
     if (!parsed.success) {
@@ -122,7 +110,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const service = await updateService({
+    const project = await updateProject({
       id: req.params.id,
       patch: parsed.data,
       file: req.file,
@@ -130,7 +118,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     });
     res.json({
       success: true,
-      data: { service: serializeService(service) },
+      data: { project: serializeProject(project) },
     });
   } catch (err) {
     next(err);
@@ -139,7 +127,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    const result = await deleteService({ id: req.params.id });
+    const result = await deleteProject({ id: req.params.id });
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);

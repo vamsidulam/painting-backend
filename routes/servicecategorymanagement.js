@@ -2,18 +2,20 @@ const express = require("express");
 const multer = require("multer");
 
 const {
-  listServices,
-  createService,
-  updateService,
-  deleteService,
-} = require("../services/servicemanagement");
+  listServiceCategories,
+  createServiceCategory,
+  updateServiceCategory,
+  deleteServiceCategory,
+} = require("../services/servicecategorymanagement");
 
-const listServicesQuery = require("../models/requests/listServicesQuery");
-const createServiceRequest = require("../models/requests/createServiceRequest");
-const updateServiceRequest = require("../models/requests/updateServiceRequest");
+const listServiceCategoriesQuery = require("../models/requests/listServiceCategoriesQuery");
+const createServiceCategoryRequest = require("../models/requests/createServiceCategoryRequest");
+const updateServiceCategoryRequest = require("../models/requests/updateServiceCategoryRequest");
 
 const { validateQuery } = require("../helpers/validation");
-const { serializeService } = require("../models/responses/serviceResponse");
+const {
+  serializeServiceCategory,
+} = require("../models/responses/serviceCategoryResponse");
 const requireAdmin = require("../middleware/requireAdmin");
 
 const router = express.Router();
@@ -31,36 +33,38 @@ const upload = multer({
 
 router.use(requireAdmin);
 
-router.get("/", validateQuery(listServicesQuery), async (req, res, next) => {
-  try {
-    const result = await listServices(req.validated);
-    res.json({
-      success: true,
-      data: {
-        rows: result.rows.map(serializeService),
-        pagination: {
-          total: result.total,
-          page: result.page,
-          limit: result.limit,
-          pages: result.pages,
+router.get(
+  "/",
+  validateQuery(listServiceCategoriesQuery),
+  async (req, res, next) => {
+    try {
+      const result = await listServiceCategories(req.validated);
+      res.json({
+        success: true,
+        data: {
+          rows: result.rows.map(serializeServiceCategory),
+          pagination: {
+            total: result.total,
+            page: result.page,
+            limit: result.limit,
+            pages: result.pages,
+          },
         },
-      },
-    });
-  } catch (err) {
-    next(err);
-  }
-});
+      });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
 
 router.post("/", upload.single("image"), async (req, res, next) => {
   try {
     const payload = {
       name: req.body.name,
-      cost: req.body.cost,
       description: req.body.description,
-      workType: req.body.workType,
-      categoryId: req.body.categoryId,
+      isActive: req.body.isActive,
     };
-    const parsed = createServiceRequest.safeParse(payload);
+    const parsed = createServiceCategoryRequest.safeParse(payload);
     if (!parsed.success) {
       return res.status(400).json({
         success: false,
@@ -72,14 +76,14 @@ router.post("/", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const service = await createService({
+    const category = await createServiceCategory({
       input: parsed.data,
       file: req.file,
       actor: req.user,
     });
     res.status(201).json({
       success: true,
-      data: { service: serializeService(service) },
+      data: { category: serializeServiceCategory(category) },
     });
   } catch (err) {
     next(err);
@@ -90,12 +94,9 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
   try {
     const payload = {};
     if (req.body.name !== undefined) payload.name = req.body.name;
-    if (req.body.cost !== undefined) payload.cost = req.body.cost;
     if (req.body.description !== undefined)
       payload.description = req.body.description;
-    if (req.body.workType !== undefined) payload.workType = req.body.workType;
-    if (req.body.categoryId !== undefined)
-      payload.categoryId = req.body.categoryId;
+    if (req.body.isActive !== undefined) payload.isActive = req.body.isActive;
     if (req.body.removeImage !== undefined)
       payload.removeImage = req.body.removeImage;
 
@@ -108,7 +109,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const parsed = updateServiceRequest.safeParse(
+    const parsed = updateServiceCategoryRequest.safeParse(
       Object.keys(payload).length > 0 ? payload : { removeImage: false },
     );
     if (!parsed.success) {
@@ -122,7 +123,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
       });
     }
 
-    const service = await updateService({
+    const category = await updateServiceCategory({
       id: req.params.id,
       patch: parsed.data,
       file: req.file,
@@ -130,7 +131,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     });
     res.json({
       success: true,
-      data: { service: serializeService(service) },
+      data: { category: serializeServiceCategory(category) },
     });
   } catch (err) {
     next(err);
@@ -139,7 +140,7 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   try {
-    const result = await deleteService({ id: req.params.id });
+    const result = await deleteServiceCategory({ id: req.params.id });
     res.json({ success: true, data: result });
   } catch (err) {
     next(err);

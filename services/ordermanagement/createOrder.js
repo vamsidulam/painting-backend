@@ -2,23 +2,22 @@ const Order = require("../../models/Order");
 const { uploadImage, slugify } = require("../../helpers/cloudinary");
 
 async function createOrder({ input, file }) {
-  if (!file) {
-    const err = new Error("Payment screenshot is required");
-    err.status = 400;
-    throw err;
+  let screenshotUrl = "";
+
+  if (file && file.buffer && file.buffer.length > 0) {
+    const folder = `painting_services/${slugify(input.customer.name)}/photo`;
+    const publicId = `screenshot_${Date.now()}`;
+    const uploadResult = await uploadImage({
+      buffer: file.buffer,
+      folder,
+      publicId,
+    });
+    screenshotUrl = uploadResult.secure_url;
   }
-
-  const folder = `painting_services/${slugify(input.customer.name)}/photo`;
-  const publicId = `screenshot_${Date.now()}`;
-
-  const uploadResult = await uploadImage({
-    buffer: file.buffer,
-    folder,
-    publicId,
-  });
 
   const order = await Order.create({
     category: input.category,
+    categoryId: input.categoryId || null,
     service: {
       id: input.service.id,
       name: input.service.name,
@@ -29,7 +28,7 @@ async function createOrder({ input, file }) {
     totalCost: input.totalCost,
     address: input.address,
     customer: input.customer,
-    screenshotUrl: uploadResult.secure_url,
+    screenshotUrl,
     status: "requested",
     workStatus: null,
   });

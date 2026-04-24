@@ -32,10 +32,11 @@ const orderServiceSchema = new Schema(
 
 const orderSchema = new Schema(
   {
-    category: {
-      type: String,
-      enum: ["interior", "exterior"],
-      required: true,
+    category: { type: String, required: true, trim: true, index: true },
+    categoryId: {
+      type: Types.ObjectId,
+      ref: "ServiceCategory",
+      default: null,
       index: true,
     },
     service: { type: orderServiceSchema, required: true },
@@ -48,7 +49,7 @@ const orderSchema = new Schema(
     totalCost: { type: Number, required: true, min: 0 },
     address: { type: addressSchema, required: true },
     customer: { type: customerSchema, required: true },
-    screenshotUrl: { type: String, required: true },
+    screenshotUrl: { type: String, default: "" },
     status: {
       type: String,
       enum: ["requested", "accepted", "rejected"],

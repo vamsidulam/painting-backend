@@ -6,7 +6,7 @@ const listOrdersQuery = z.object({
   q: z.string().trim().max(200).optional().default(""),
   status: z.enum(["requested", "accepted", "rejected"]).optional(),
   workStatus: z.enum(["pending", "started", "completed"]).optional(),
-  category: z.enum(["interior", "exterior"]).optional(),
+  category: z.string().trim().min(1).max(100).optional(),
 });
 
 module.exports = listOrdersQuery;

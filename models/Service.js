@@ -5,9 +5,17 @@ const serviceSchema = new Schema(
     name: { type: String, required: true, trim: true, index: true },
     cost: { type: Number, required: true, min: 0 },
     description: { type: String, trim: true, default: "" },
-    category: {
+    image: { type: String, trim: true, default: "" },
+    workType: {
       type: String,
-      enum: ["interior", "exterior"],
+      enum: ["fresh", "repainting"],
+      required: true,
+      default: "fresh",
+      index: true,
+    },
+    categoryId: {
+      type: Types.ObjectId,
+      ref: "ServiceCategory",
       required: true,
       index: true,
     },

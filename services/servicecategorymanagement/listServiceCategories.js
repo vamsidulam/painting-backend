@@ -1,19 +1,19 @@
-const Service = require("../../models/Service");
+const ServiceCategory = require("../../models/ServiceCategory");
 
 function escapeRegex(s) {
   return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-async function listServices({
+async function listServiceCategories({
   page = 1,
   limit = 10,
   q = "",
-  categoryId,
-  workType,
+  isActive,
 }) {
   const filter = {};
-  if (categoryId) filter.categoryId = categoryId;
-  if (workType) filter.workType = workType;
+
+  if (isActive === "true") filter.isActive = true;
+  else if (isActive === "false") filter.isActive = false;
 
   const trimmed = q ? q.trim() : "";
   if (trimmed) {
@@ -24,12 +24,11 @@ async function listServices({
   const skip = (page - 1) * limit;
 
   const [rows, total] = await Promise.all([
-    Service.find(filter)
+    ServiceCategory.find(filter)
       .sort({ createdAt: -1 })
       .skip(skip)
-      .limit(limit)
-      .populate("categoryId", "name image description isActive"),
-    Service.countDocuments(filter),
+      .limit(limit),
+    ServiceCategory.countDocuments(filter),
   ]);
 
   const pages = total === 0 ? 1 : Math.ceil(total / limit);
@@ -37,4 +36,4 @@ async function listServices({
   return { rows, total, page, limit, pages };
 }
 
-module.exports = listServices;
+module.exports = listServiceCategories;

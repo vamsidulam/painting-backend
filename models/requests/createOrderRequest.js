@@ -1,7 +1,14 @@
 const { z } = require("zod");
 
+const objectIdRegex = /^[a-fA-F0-9]{24}$/;
+
 const createOrderRequest = z.object({
-  category: z.enum(["interior", "exterior"]),
+  category: z.string().trim().min(1).max(100),
+  categoryId: z
+    .string()
+    .trim()
+    .regex(objectIdRegex, "categoryId must be a valid ObjectId")
+    .optional(),
   service: z.object({
     id: z.string().min(1),
     name: z.string().trim().min(1).max(200),
