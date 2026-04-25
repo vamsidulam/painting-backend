@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 
 const { connectDb } = require("./db");
+const { ensureUploadsDir, UPLOADS_ROOT } = require("./helpers/upload");
 const healthRouter = require("./routes/health");
 const adminAuthRouter = require("./routes/adminauthentication");
 const userManagementRouter = require("./routes/usermanagement");
@@ -34,6 +35,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 console.log("DB URL:", process.env.DATABASE_URL);
+
+ensureUploadsDir();
+app.use("/uploads", express.static(UPLOADS_ROOT));
 
 app.use("/health", healthRouter);
 app.use("/services", publicServicesRouter);

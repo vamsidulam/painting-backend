@@ -13,7 +13,7 @@ const {
   buildSetPasswordLink,
   getFrontendUrl,
 } = require("./email");
-const { uploadImage, slugify } = require("./cloudinary");
+const { uploadImage, slugify, ensureUploadsDir } = require("./upload");
 
 module.exports = {
   hashPassword,
@@ -31,4 +31,5 @@ module.exports = {
   getFrontendUrl,
   uploadImage,
   slugify,
+  ensureUploadsDir,
 };

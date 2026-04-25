@@ -1,5 +1,5 @@
 const Project = require("../../models/Project");
-const { uploadImage, slugify } = require("../../helpers/cloudinary");
+const { uploadImage, slugify } = require("../../helpers/upload");
 
 async function updateProject({ id, patch, file, actor }) {
   const project = await Project.findById(id);
@@ -22,6 +22,8 @@ async function updateProject({ id, patch, file, actor }) {
       buffer: file.buffer,
       folder,
       publicId,
+      mimetype: file.mimetype,
+      originalname: file.originalname,
     });
     project.image = uploadResult.secure_url || "";
   }

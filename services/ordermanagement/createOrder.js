@@ -1,5 +1,5 @@
 const Order = require("../../models/Order");
-const { uploadImage, slugify } = require("../../helpers/cloudinary");
+const { uploadImage, slugify } = require("../../helpers/upload");
 
 async function createOrder({ input, file }) {
   let screenshotUrl = "";
@@ -11,6 +11,8 @@ async function createOrder({ input, file }) {
       buffer: file.buffer,
       folder,
       publicId,
+      mimetype: file.mimetype,
+      originalname: file.originalname,
     });
     screenshotUrl = uploadResult.secure_url;
   }

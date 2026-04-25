@@ -1,5 +1,5 @@
 const Order = require("../../models/Order");
-const { uploadImage, slugify } = require("../../helpers/cloudinary");
+const { uploadImage, slugify } = require("../../helpers/upload");
 
 async function attachScreenshot({ id, file }) {
   if (!file || !file.buffer || file.buffer.length === 0) {
@@ -24,6 +24,8 @@ async function attachScreenshot({ id, file }) {
     buffer: file.buffer,
     folder,
     publicId,
+    mimetype: file.mimetype,
+    originalname: file.originalname,
   });
 
   order.screenshotUrl = uploadResult.secure_url;

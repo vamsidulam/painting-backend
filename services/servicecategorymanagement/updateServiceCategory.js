@@ -1,5 +1,5 @@
 const ServiceCategory = require("../../models/ServiceCategory");
-const { uploadImage, slugify } = require("../../helpers/cloudinary");
+const { uploadImage, slugify } = require("../../helpers/upload");
 
 async function updateServiceCategory({ id, patch, file, actor }) {
   const category = await ServiceCategory.findById(id);
@@ -35,6 +35,8 @@ async function updateServiceCategory({ id, patch, file, actor }) {
       buffer: file.buffer,
       folder,
       publicId,
+      mimetype: file.mimetype,
+      originalname: file.originalname,
     });
     category.image = uploadResult.secure_url || "";
   }
