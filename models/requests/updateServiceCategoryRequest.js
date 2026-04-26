@@ -11,6 +11,7 @@ const updateServiceCategoryRequest = z
   .object({
     name: z.string().trim().min(2).max(100).optional(),
     description: z.string().trim().max(2000).optional(),
+    includesMoney: boolFromAny.optional(),
     isActive: boolFromAny.optional(),
     removeImage: boolFromAny.optional(),
   })
@@ -18,6 +19,7 @@ const updateServiceCategoryRequest = z
     (v) =>
       v.name !== undefined ||
       v.description !== undefined ||
+      v.includesMoney !== undefined ||
       v.isActive !== undefined ||
       v.removeImage !== undefined,
     { message: "Provide at least one field to update" },

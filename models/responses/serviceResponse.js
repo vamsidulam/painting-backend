@@ -7,6 +7,10 @@ function extractCategory(categoryField) {
         name: categoryField.name || "",
         image: categoryField.image || "",
         description: categoryField.description || "",
+        includesMoney:
+          categoryField.includesMoney === undefined
+            ? true
+            : Boolean(categoryField.includesMoney),
       };
     }
   }
@@ -31,6 +35,8 @@ function serializeService(service) {
           name: cat.name,
           image: cat.image || "",
           description: cat.description || "",
+          includesMoney:
+            cat.includesMoney === undefined ? true : Boolean(cat.includesMoney),
         }
       : null,
     createdAt: plain.createdAt,
@@ -54,6 +60,8 @@ function serializePublicService(service) {
     category: cat.name ? String(cat.name).toLowerCase() : "",
     categoryId: cat.id,
     categoryName: cat.name || "",
+    categoryIncludesMoney:
+      cat.includesMoney === undefined ? true : Boolean(cat.includesMoney),
   };
 }
 

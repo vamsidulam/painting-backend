@@ -22,6 +22,8 @@ async function updateServiceCategory({ id, patch, file, actor }) {
     category.name = patch.name;
   }
   if (patch.description !== undefined) category.description = patch.description;
+  if (patch.includesMoney !== undefined)
+    category.includesMoney = Boolean(patch.includesMoney);
   if (patch.isActive !== undefined) category.isActive = Boolean(patch.isActive);
 
   if (patch.removeImage) {

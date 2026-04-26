@@ -62,6 +62,7 @@ router.post("/", upload.single("image"), async (req, res, next) => {
     const payload = {
       name: req.body.name,
       description: req.body.description,
+      includesMoney: req.body.includesMoney,
       isActive: req.body.isActive,
     };
     const parsed = createServiceCategoryRequest.safeParse(payload);
@@ -96,6 +97,8 @@ router.patch("/:id", upload.single("image"), async (req, res, next) => {
     if (req.body.name !== undefined) payload.name = req.body.name;
     if (req.body.description !== undefined)
       payload.description = req.body.description;
+    if (req.body.includesMoney !== undefined)
+      payload.includesMoney = req.body.includesMoney;
     if (req.body.isActive !== undefined) payload.isActive = req.body.isActive;
     if (req.body.removeImage !== undefined)
       payload.removeImage = req.body.removeImage;

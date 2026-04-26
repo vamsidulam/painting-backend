@@ -6,6 +6,8 @@ function serializeServiceCategory(category) {
     name: plain.name,
     description: plain.description || "",
     image: plain.image || "",
+    includesMoney:
+      plain.includesMoney === undefined ? true : Boolean(plain.includesMoney),
     isActive: plain.isActive === undefined ? true : Boolean(plain.isActive),
     createdBy: plain.createdBy ? String(plain.createdBy) : null,
     updatedBy: plain.updatedBy ? String(plain.updatedBy) : null,
@@ -22,6 +24,8 @@ function serializePublicServiceCategory(category) {
     name: plain.name,
     description: plain.description || "",
     image: plain.image || "",
+    includesMoney:
+      plain.includesMoney === undefined ? true : Boolean(plain.includesMoney),
   };
 }
 

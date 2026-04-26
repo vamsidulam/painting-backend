@@ -11,6 +11,7 @@ const serviceCategorySchema = new Schema(
     },
     description: { type: String, trim: true, default: "" },
     image: { type: String, trim: true, default: "" },
+    includesMoney: { type: Boolean, default: true },
     isActive: { type: Boolean, default: true, index: true },
     createdBy: { type: Types.ObjectId, ref: "User", default: null },
     updatedBy: { type: Types.ObjectId, ref: "User", default: null },

@@ -28,7 +28,7 @@ async function listServices({
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("categoryId", "name image description isActive"),
+      .populate("categoryId", "name image description isActive includesMoney"),
     Service.countDocuments(filter),
   ]);
 

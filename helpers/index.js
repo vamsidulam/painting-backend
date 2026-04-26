@@ -10,6 +10,8 @@ const {
   sendMail,
   sendAdminInvite,
   sendPasswordReset,
+  sendCustomerBookingConfirmation,
+  sendAdminBookingNotification,
   buildSetPasswordLink,
   getFrontendUrl,
 } = require("./email");
@@ -27,6 +29,8 @@ module.exports = {
   sendMail,
   sendAdminInvite,
   sendPasswordReset,
+  sendCustomerBookingConfirmation,
+  sendAdminBookingNotification,
   buildSetPasswordLink,
   getFrontendUrl,
   uploadImage,

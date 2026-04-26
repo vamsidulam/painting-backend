@@ -37,7 +37,10 @@ async function createService({ input, file, actor }) {
     updatedBy: actorId,
   });
 
-  await service.populate("categoryId", "name image description isActive");
+  await service.populate(
+    "categoryId",
+    "name image description isActive includesMoney",
+  );
   return service;
 }
 

@@ -45,7 +45,10 @@ async function updateService({ id, patch, file, actor }) {
   service.updatedBy = actor && actor.id ? actor.id : null;
 
   await service.save();
-  await service.populate("categoryId", "name image description isActive");
+  await service.populate(
+    "categoryId",
+    "name image description isActive includesMoney",
+  );
   return service;
 }
 

@@ -31,6 +31,8 @@ async function createServiceCategory({ input, file, actor }) {
     name: input.name,
     description: input.description || "",
     image: imageUrl,
+    includesMoney:
+      input.includesMoney === undefined ? true : Boolean(input.includesMoney),
     isActive: input.isActive === undefined ? true : Boolean(input.isActive),
     createdBy: actorId,
     updatedBy: actorId,
